@@ -31,16 +31,13 @@ pub fn routes(db: Arc<Database>, shard_config: Arc<ShardConfig>) -> Router {
         .with_state((db, shard_config))
 }
 
-/// Возвращает информацию о текущем шарде
-
 async fn shard_info(
     State((_, shard_config)): State<(Arc<Database>, Arc<ShardConfig>)>,
 ) -> impl IntoResponse {
-    println!("Shard Info: {:?}", shard_config); // Добавляем лог
+    println!("Shard Info: {:?}", shard_config);
     Json((*shard_config).clone()).into_response()
 }
 
-//// Получает значение (и перенаправляет, если ключ не на этом узле)
 async fn get_value(
     State((db, shard_config)): State<(Arc<Database>, Arc<ShardConfig>)>,
     Query(params): Query<KeyQuery>,
@@ -54,7 +51,7 @@ async fn get_value(
             .text()
             .await
             .unwrap()
-            .into_response(); // Добавляем `.into_response()`
+            .into_response();
     }
 
     match db.get(&params.key) {
@@ -96,7 +93,6 @@ async fn set_value(
     Json("OK".to_string()).into_response()
 }
 
-/// Удаляет значение (и перенаправляет, если ключ не на этом узле)
 async fn delete_value(
     State((db, shard_config)): State<(Arc<Database>, Arc<ShardConfig>)>,
     Query(params): Query<KeyQuery>,

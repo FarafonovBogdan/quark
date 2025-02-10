@@ -33,7 +33,6 @@ async fn main() {
         args.shard_index,
     ));
 
-    // Уникальная папка для каждого шарда
     let db_path = format!("data/db_{}", args.port);
     let db = Arc::new(Database::new(&db_path, false).expect("Failed to open DB"));
 
