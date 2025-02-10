@@ -20,7 +20,6 @@ impl ShardConfig {
         &self.shards[self.current_shard]
     }
 
-    /// Определяет, какому шардy принадлежит ключ
     pub fn get_shard(&self, key: &str) -> usize {
         let mut hasher = DefaultHasher::new();
         key.hash(&mut hasher);
@@ -39,7 +38,6 @@ impl ShardConfig {
         shard_idx == self.current_shard
     }
 
-    /// Возвращает адрес шарда, которому принадлежит ключ
     pub fn get_shard_address(&self, key: &str) -> &str {
         let shard_idx = self.get_shard(key);
         &self.shards[shard_idx]
