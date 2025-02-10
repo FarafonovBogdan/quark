@@ -28,14 +28,14 @@ impl ShardConfig {
 
     pub fn is_local_shard(&self, key: &str) -> bool {
         let shard_idx = self.get_shard(key);
+        let is_local = shard_idx == self.current_shard;
+
         println!(
-            "Key={} → Shard={}, Current={}, Local={}",
-            key,
-            shard_idx,
-            self.current_shard,
-            shard_idx == self.current_shard
+            "DEBUG: Key={} → Shard={}, Current={}, Local={}",
+            key, shard_idx, self.current_shard, is_local
         );
-        shard_idx == self.current_shard
+
+        is_local
     }
 
     pub fn get_shard_address(&self, key: &str) -> &str {

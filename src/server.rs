@@ -44,8 +44,14 @@ async fn get_value(
 ) -> impl IntoResponse {
     if !shard_config.is_local_shard(&params.key) {
         let target = shard_config.get_shard_address(&params.key);
-        let url = format!("http://{}/get?key={}", target, params.key);
-        return reqwest::get(&url)
+        if target == shard_config.current_address() {
+            return Json("ERROR: Shard redirection loop detected!").into_response();
+        }
+
+        println!("DEBUG: Redirecting GET key={} to {}", params.key, target);
+        return reqwest::Client::new()
+            .get(format!("http://{}/get?key={}", target, params.key))
+            .send()
             .await
             .unwrap()
             .text()
@@ -54,8 +60,12 @@ async fn get_value(
             .into_response();
     }
 
+    println!(
+        "DEBUG: Fetching key={} locally from shard {}",
+        params.key, shard_config.current_shard
+    );
     match db.get(&params.key) {
-        Some(value) => Json(value).into_response(), // Добавляем `.into_response()`
+        Some(value) => Json(value).into_response(),
         None => Json("Key not found".to_string()).into_response(),
     }
 }
@@ -64,17 +74,15 @@ async fn set_value(
     State((db, shard_config)): State<(Arc<Database>, Arc<ShardConfig>)>,
     Json(payload): Json<KeyValue>,
 ) -> impl IntoResponse {
-    let target = shard_config.get_shard_address(&payload.key);
-
     if !shard_config.is_local_shard(&payload.key) {
+        let target = shard_config.get_shard_address(&payload.key);
         if target == shard_config.current_address() {
-            return Json("Shard redirection loop detected!").into_response();
+            return Json("ERROR: Shard redirection loop detected!").into_response();
         }
 
-        let url = format!("http://{}/set", target);
-        println!("Redirecting to {}", url);
+        println!("DEBUG: Redirecting key={} to {}", payload.key, target);
         return reqwest::Client::new()
-            .post(&url)
+            .post(format!("http://{}/set", target))
             .json(&payload)
             .send()
             .await
@@ -85,11 +93,11 @@ async fn set_value(
             .into_response();
     }
 
-    db.set(&payload.key, &payload.value).unwrap();
     println!(
-        "Stored in local DB: key={}, value={}",
-        payload.key, payload.value
+        "DEBUG: Storing key={} locally in shard {}",
+        payload.key, shard_config.current_shard
     );
+    db.set(&payload.key, &payload.value).unwrap();
     Json("OK".to_string()).into_response()
 }
 
@@ -99,8 +107,14 @@ async fn delete_value(
 ) -> impl IntoResponse {
     if !shard_config.is_local_shard(&params.key) {
         let target = shard_config.get_shard_address(&params.key);
-        let url = format!("http://{}/del?key={}", target, params.key);
-        return reqwest::get(&url)
+        if target == shard_config.current_address() {
+            return Json("ERROR: Shard redirection loop detected!").into_response();
+        }
+
+        println!("DEBUG: Redirecting DELETE key={} to {}", params.key, target);
+        return reqwest::Client::new()
+            .post(format!("http://{}/del", target)) // `POST`, а не `GET`
+            .send()
             .await
             .unwrap()
             .text()
@@ -109,6 +123,10 @@ async fn delete_value(
             .into_response();
     }
 
+    println!(
+        "DEBUG: Deleting key={} locally in shard {}",
+        params.key, shard_config.current_shard
+    );
     db.delete(&params.key).unwrap();
     Json("Deleted".to_string()).into_response()
 }
