@@ -17,6 +17,7 @@ impl Database {
     }
 
     pub fn set(&self, key: &str, value: &str) -> sled::Result<()> {
+        println!("DB: Writing key={} value={}", key, value);
         if self.read_only {
             return Err(sled::Error::Unsupported("Read-only mode".into()));
         }
