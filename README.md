@@ -1,22 +1,21 @@
-### 📦 Distributed Key-Value Store
-### 🖥 A distributed key-value store with sharding and automatic request forwarding.
-
-- 🚀 Features:
+### Distributed Key-Value Store
+### A distributed key-value store with sharding and automatic request forwarding.
+### Features:
 - ✅ Sharding – requests are automatically routed to the correct node.
 - ✅ HTTP API – simple REST interface for interacting with the database.
 - ✅ Logging – transparent request tracking and forwarding.
 - ✅ Horizontal scaling – easily add new nodes.
 
-  📌 Installation & Setup
+  ## Installation & Setup
  ### 1. Clone the repository
-- git clone https://github.com/yourusername/distributed-kv-store.git
-- cd distributed-kv-store
+``` git clone https://github.com/yourusername/distributed-kv-store](https://github.com/FarafonovBogdan/quark.git ```
+``` cd distributed-kv-store ```
  ### 2. Install dependencies
-- cargo build --release
+``` cargo build --release ```
  ### 3. Start three nodes (shards)
-- cargo run -- --port 8080
-- cargo run -- --port 8081
-- cargo run -- --port 8082
+``` cargo run -- --port 8080 ```
+``` cargo run -- --port 8081 ```
+``` cargo run -- --port 8082 ```
  ### API Usage
 - Set a key
   ``` curl -X POST -H "Content-Type: application/json" -d '{"key": "user123", "value": "Hello"}' http://127.0.0.1:8080/set ```
