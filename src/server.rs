@@ -33,37 +33,37 @@ pub fn routes(db: Arc<Database>, shard_config: Arc<ShardConfig>) -> Router {
         .with_state((db, shard_config))
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-struct ApiResponse<T> {
-    status: String,
-    data: Option<T>,
-    error: Option<String>,
-}
+// #[derive(Debug, Serialize, Deserialize)]
+// struct ApiResponse<T> {
+//     status: String,
+//     data: Option<T>,
+//     error: Option<String>,
+// }
 
-impl<T: Serialize> IntoResponse for ApiResponse<T> {
-    fn into_response(self) -> Response {
-        match self.error {
-            Some(err) => (
-                StatusCode::BAD_REQUEST,
-                Json(ApiResponse::<T> {
-                    status: "error".to_string(),
-                    data: None,
-                    error: Some(err),
-                }),
-            )
-                .into_response(),
-            None => (
-                StatusCode::OK,
-                Json(ApiResponse {
-                    status: "success".to_string(),
-                    data: self.data,
-                    error: None,
-                }),
-            )
-                .into_response(),
-        }
-    }
-}
+// impl<T: Serialize> IntoResponse for ApiResponse<T> {
+//     fn into_response(self) -> Response {
+//         match self.error {
+//             Some(err) => (
+//                 StatusCode::BAD_REQUEST,
+//                 Json(ApiResponse::<T> {
+//                     status: "error".to_string(),
+//                     data: None,
+//                     error: Some(err),
+//                 }),
+//             )
+//                 .into_response(),
+//             None => (
+//                 StatusCode::OK,
+//                 Json(ApiResponse {
+//                     status: "success".to_string(),
+//                     data: self.data,
+//                     error: None,
+//                 }),
+//             )
+//                 .into_response(),
+//         }
+//     }
+// }
 
 async fn shard_info(
     State((_, shard_config)): State<(Arc<Database>, Arc<ShardConfig>)>,
