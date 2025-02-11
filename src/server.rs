@@ -1,9 +1,11 @@
 use axum::{
     extract::{Query, State},
-    response::IntoResponse,
+    http::StatusCode,
+    response::{IntoResponse, Response},
     routing::{get, post},
     Json, Router,
 };
+
 use reqwest;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -29,6 +31,38 @@ pub fn routes(db: Arc<Database>, shard_config: Arc<ShardConfig>) -> Router {
         .route("/del", post(delete_value))
         .route("/shard-info", get(shard_info))
         .with_state((db, shard_config))
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct ApiResponse<T> {
+    status: String,
+    data: Option<T>,
+    error: Option<String>,
+}
+
+impl<T: Serialize> IntoResponse for ApiResponse<T> {
+    fn into_response(self) -> Response {
+        match self.error {
+            Some(err) => (
+                StatusCode::BAD_REQUEST,
+                Json(ApiResponse::<T> {
+                    status: "error".to_string(),
+                    data: None,
+                    error: Some(err),
+                }),
+            )
+                .into_response(),
+            None => (
+                StatusCode::OK,
+                Json(ApiResponse {
+                    status: "success".to_string(),
+                    data: self.data,
+                    error: None,
+                }),
+            )
+                .into_response(),
+        }
+    }
 }
 
 async fn shard_info(
