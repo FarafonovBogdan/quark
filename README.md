@@ -1,10 +1,10 @@
 ### Distributed Key-Value Store
 ### A distributed key-value store with sharding and automatic request forwarding.
 ### Features:
-- ✅ Sharding – requests are automatically routed to the correct node.
-- ✅ HTTP API – simple REST interface for interacting with the database.
-- ✅ Logging – transparent request tracking and forwarding.
-- ✅ Horizontal scaling – easily add new nodes.
+# Sharding – requests are automatically routed to the correct node.
+# HTTP API – simple REST interface for interacting with the database.
+# Logging – transparent request tracking and forwarding.
+# Horizontal scaling – easily add new nodes.
 
   ## Installation & Setup
  ### 1. Clone the repository
