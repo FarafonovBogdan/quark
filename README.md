@@ -25,7 +25,7 @@
   ``` curl "http://127.0.0.1:8080/del?key=user123" ```
   ### 🔄 If the key is stored on a different shard, the request is automatically forwarded to the correct server.
 
-🔧 How It Works
+# How It Works
 - The /set request determines the correct shard for the given key and either stores it locally or forwards the request.
 - The /get request first checks the local node – if the key isn’t found, it forwards the request to the correct shard.
 - The /del request works the same way – first checking locally, then forwarding if necessary.
