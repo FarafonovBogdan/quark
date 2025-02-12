@@ -1,5 +1,4 @@
-### Distributed Key-Value Store
-### A distributed key-value store with sharding and automatic request forwarding.
+## Distributed Key-Value Store
 # Features:
 ### Sharding – requests are automatically routed to the correct node.
 ### HTTP API – simple REST interface for interacting with the database.
