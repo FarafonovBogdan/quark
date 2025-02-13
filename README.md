@@ -16,9 +16,12 @@ cd distributed-kv-store
  ### 2. Install dependencies
 ``` cargo build --release ```
  ### 3. Start three nodes (shards)
-``` cargo run -- --port 8080 ```
-``` cargo run -- --port 8081 ```
-``` cargo run -- --port 8082 ```
+``` 
+cargo run -- --shard-index 0 --port 8080 
+cargo run -- --shard-index 1 --port 8081 
+cargo run -- --shard-index 2 --port 8082
+
+```
  ### API Usage
 - Set a key
   ``` curl -X POST -H "Content-Type: application/json" -d '{"key": "user123", "value": "Hello"}' http://127.0.0.1:8080/set ```
