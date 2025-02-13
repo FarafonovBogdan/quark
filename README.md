@@ -14,13 +14,12 @@ git clone https://github.com/FarafonovBogdan/quark.git
 cd distributed-kv-store 
 ```
  ### 2. Install dependencies
-``` cargo build --release ```
+``` cargo build ```
  ### 3. Start three nodes (shards)
 ``` 
-cargo run -- --shard-index 0 --port 8080 
-cargo run -- --shard-index 1 --port 8081 
-cargo run -- --shard-index 2 --port 8082
-
+  cargo run -- --shard-index 0 --port 8080 
+  cargo run -- --shard-index 1 --port 8081 
+  cargo run -- --shard-index 2 --port 8082
 ```
  ### API Usage
 - Set a key
