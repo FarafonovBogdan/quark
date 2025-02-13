@@ -7,7 +7,7 @@
 
   ## Installation & Setup
  ### 1. Clone the repository
-``` git clone https://github.com/FarafonovBogdan/quark.git ```
+curl ``` git clone https://github.com/FarafonovBogdan/quark.git ```
 ``` cd distributed-kv-store ```
  ### 2. Install dependencies
 ``` cargo build --release ```
