@@ -7,9 +7,8 @@
 
   ## Installation & Setup
  ### 1. Clone the repository
-```bash
- 
-curl git clone https://github.com/FarafonovBogdan/quark.git 
+```
+git clone https://github.com/FarafonovBogdan/quark.git 
 ```
 
 
